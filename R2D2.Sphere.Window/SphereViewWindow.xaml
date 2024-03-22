@@ -1,0 +1,228 @@
+﻿<Window x:Class="R2D2.ProgramSphere.SphereViewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:R2D2"
+        mc:Ignorable="d"
+        Title="R2D2 # Sphere" 
+        MinHeight="450" Height="450" 
+        Width="900" MinWidth="900" 
+        Loaded="Window_Loaded" KeyDown="Window_KeyDown" PreviewKeyDown="Window_KeyDown" 
+        Background="SlateGray"
+        >
+
+    <Window.Resources>
+        <Style TargetType="Grid">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="LightGray" />
+        </Style>
+
+        <Style TargetType="Menu">
+            <Setter Property="Background" >
+                <Setter.Value>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="LightGray" Offset="0"/>
+                        <GradientStop Color="Transparent" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="LightGray" />
+        </Style>
+
+        <Style TargetType="MenuItem">
+            <Setter Property="Foreground" Value="Black" />
+        </Style>
+
+        <Style TargetType="DockPanel">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+
+        <Style TargetType="StackPanel">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="Snow" />
+        </Style>
+
+        <Style x:Key="RoundCorner" TargetType="{x:Type Button}">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid x:Name="grid">
+                            <Border x:Name="border" CornerRadius="8" BorderThickness="0">
+                                <Border.Background>
+                                    <RadialGradientBrush GradientOrigin="0.496,1.052">
+                                        <RadialGradientBrush.RelativeTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform CenterX="0.5" CenterY="0.5" 
+                                                        ScaleX="1.5" ScaleY="1.5"/>
+                                                <TranslateTransform X="0.02" Y="0.3"/>
+                                            </TransformGroup>
+                                        </RadialGradientBrush.RelativeTransform>
+                                        <GradientStop Offset="1" Color="#00000000"/>
+                                        <GradientStop Offset="0.3" Color="#FFFFFFFF"/>
+                                    </RadialGradientBrush>
+                                </Border.Background>
+                                <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          TextElement.FontWeight="Bold">
+                                </ContentPresenter>
+                            </Border>
+
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" TargetName="border">
+                                    <Setter.Value>
+                                        <RadialGradientBrush GradientOrigin="0.496,1.052">
+                                            <RadialGradientBrush.RelativeTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1.5" ScaleY="1.5"/>
+                                                    <TranslateTransform X="0.02" Y="0.3"/>
+                                                </TransformGroup>
+                                            </RadialGradientBrush.RelativeTransform>
+                                            <GradientStop Color="#00000000" Offset="1"/>
+                                            <GradientStop Color="#FF303030" Offset="0.3"/>
+                                        </RadialGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" TargetName="border" Value="#FF33962B"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" TargetName="grid" Value="0.25"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="New" Executed="Menu_File_New_Click"/>
+        <CommandBinding Command="Open" Executed="Menu_File_Open_Click"/>
+        <CommandBinding Command="Save" Executed="Menu_File_Save_Click"/>
+        <CommandBinding Command="Close" Executed="Menu_File_Exit_Click"/>
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Key="N" Modifiers="Control" Command="New"/>
+        <KeyBinding Key="O" Modifiers="Control" Command="Open"/>
+        <KeyBinding Key="S" Modifiers="Control" Command="Save"/>
+        <KeyBinding Key="X" Modifiers="Control" Command="Close"/>
+    </Window.InputBindings>
+    <Grid>
+        <Grid.Resources>
+            <SolidColorBrush x:Key="TransparentIshBrush" Color="Red" Opacity=".3" />
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition MinHeight="300"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <DockPanel>
+                <Menu DockPanel.Dock="Top">
+                    <MenuItem Header="_File">
+                        <MenuItem Header="_New" Name="Menu_File_New" Command="New" Click="Menu_File_New_Click" />
+                        <MenuItem Header="_Open" Name="Menu_File_Open" Command="Open" Click="Menu_File_Open_Click"/>
+                        <MenuItem Header="_Save" Name="Menu_File_Save" Command="Save" Click="Menu_File_Save_Click" />
+                        <Separator />
+                        <MenuItem Header="_Exit" Name="Menu_File_Exit" Command="Close" Click="Menu_File_Exit_Click" />
+                    </MenuItem>
+                    <MenuItem Header="_Tools">
+                        <MenuItem Header="_Graphs">
+                            <MenuItem Header="_(X,Y)" Name="Menu_Tools_Graph_XY" Click="Menu_Tools_Graph_XY_Click" IsCheckable="True" IsChecked="False"/>
+                            <MenuItem Header="_(X,Z)" Name="Menu_Tools_Graph_XZ" Click="Menu_Tools_Graph_XZ_Click" IsCheckable="True"/>
+                            <MenuItem Header="_(Y,Z)" Name="Menu_Tools_Graph_YZ" Click="Menu_Tools_Graph_YZ_Click" IsCheckable="True"/>
+                            <MenuItem Header="_(θ,φ)" Name="Menu_Tools_Graph_TP" Click="Menu_Tools_Graph_TP_Click" IsCheckable="True"/>
+                        </MenuItem>
+                    </MenuItem>
+                </Menu>
+            </DockPanel>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition MinWidth="600" />
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition MinWidth="200" MaxWidth="200" />
+            </Grid.ColumnDefinitions>
+            <DockPanel Grid.Column="1">
+                <Border CornerRadius="10" BorderThickness="5" Background="LightCyan"
+                        MouseDown="MainViewport_MouseDown" MouseUp="MainViewport_MouseUp"
+                        MouseMove="MainViewport_MouseMove" MouseLeave="MainViewport_MouseLeave"
+                        MouseWheel="MainViewport_MouseWheel"
+                        >
+                    <Viewport3D VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Name="MainViewport"  />
+                </Border>
+            </DockPanel>
+            <GridSplitter Grid.Column="2" HorizontalAlignment="Stretch" ResizeDirection="Columns" Height="Auto" Width="0" Focusable="False" ResizeBehavior="BasedOnAlignment"/>
+            <Grid Grid.Column="3">
+                <StackPanel HorizontalAlignment="Stretch">
+                    <Border CornerRadius="6" BorderBrush="Fuchsia" BorderThickness="2" Margin="2 0 2 5">
+                        <StackPanel>
+                            <Label Content="Initial Point:"/>
+                            <DockPanel HorizontalAlignment="Stretch">
+                                <Label DockPanel.Dock="Left" MinWidth="30">θ__0</Label>
+                                <Slider Maximum="100" TickPlacement="BottomRight" TickFrequency="5" Name="th0" ValueChanged="Th0_ValueChanged" Focusable="false" IsSnapToTickEnabled="true"/>
+                            </DockPanel>
+                            <DockPanel HorizontalAlignment="Stretch">
+                                <Label DockPanel.Dock="Left" MinWidth="30">φ__0</Label>
+                                <Slider Maximum="100" TickPlacement="BottomRight" TickFrequency="5" Name="ph0" ValueChanged="Ph0_ValueChanged" Focusable="false" IsSnapToTickEnabled="true"/>
+                            </DockPanel>
+                        </StackPanel>
+                    </Border>
+                    <Border CornerRadius="6" BorderBrush="Gainsboro" BorderThickness="2" Margin="2 0 2 5">
+                        <StackPanel>
+                            <Label Content="Final Point:"/>
+                            <DockPanel HorizontalAlignment="Stretch">
+                                <Label DockPanel.Dock="Left" MinWidth="30">θ__1</Label>
+                                <Slider Maximum="100" TickPlacement="BottomRight" TickFrequency="5" Name="th1" ValueChanged="Th1_ValueChanged" Focusable="false" IsSnapToTickEnabled="true"/>
+                            </DockPanel>
+                            <DockPanel HorizontalAlignment="Stretch">
+                                <Label DockPanel.Dock="Left" MinWidth="30">φ__1</Label>
+                                <Slider Maximum="100" TickPlacement="BottomRight" TickFrequency="5" Name="ph1" ValueChanged="Ph1_ValueChanged" Focusable="false" IsSnapToTickEnabled="true"/>
+                            </DockPanel>
+                        </StackPanel>
+                    </Border>
+                    <DockPanel HorizontalAlignment="Stretch">
+                        <Label DockPanel.Dock="Left" MinWidth="30">Draw sphere</Label>
+                        <CheckBox VerticalAlignment="Center" Name="ChBSphere" Checked="ChBSphere_Checked" Unchecked="ChBSphere_Unchecked" IsChecked="true" Focusable="false"/>
+                    </DockPanel>
+                    <DockPanel HorizontalAlignment="Stretch">
+                        <Label DockPanel.Dock="Left" MinWidth="30">Rotations:</Label>
+                        <Button HorizontalAlignment="Right" Margin="0 0 5 0" Width="20" Height="20" Foreground="LightGray" PreviewMouseDown="Button_MouseDown"  Style="{DynamicResource RoundCorner}">
+                            <Button.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="X" Name="RXAddAction" Click="RXAddAction_Click" />
+                                    <MenuItem Header="Y" Name="RYAddAction" Click="RYAddAction_Click" />
+                                    <MenuItem Header="Z" Name="RZAddAction" Click="RZAddAction_Click"/>
+                                </ContextMenu>
+                            </Button.ContextMenu>
+                            +
+                        </Button>
+                    </DockPanel>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalAlignment="Stretch" Height="100">
+                        <StackPanel Orientation="Vertical"  Name="RotationsList">
+                        </StackPanel>
+                    </ScrollViewer>
+
+
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
